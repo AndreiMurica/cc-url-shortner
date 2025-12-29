@@ -1,0 +1,8 @@
+kubectl apply -f postgres-db-pvc.yaml
+kubectl apply -f postgres-db-deployment.yaml
+kubectl apply -f postgres-db-service.yaml
+kubectl apply -f postgres-db-secret.yaml
+
+
+kubectl apply -f adminer-service.yaml
+kubectl apply -f adminer-deployment.yaml
