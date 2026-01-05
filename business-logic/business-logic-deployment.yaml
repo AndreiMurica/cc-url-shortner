@@ -1,32 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: postgres-db
-    labels:
-        app: postgres-db
+    name: business-logic
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: postgres-db
+            app: business-logic
     template:
         metadata:
             labels:
-                app: postgres-db
+                app: business-logic
         spec:
-            volumes:
-                - name: postgres-storage-volume
-                  persistentVolumeClaim:
-                      claimName: postgres-db-claim
-                - name: postgres-init-volume
-                  configMap:
-                      name: postgres-init-script
             containers:
-                - name: postgres-db
-                  image: postgres:15-alpine
+                - name: business-logic
+                  image: andreimurica/cc-business-logic:latest
+                  imagePullPolicy: IfNotPresent
+
                   ports:
-                      - containerPort: 5432
+                      - containerPort: 8080
+
                   env:
+                      - name: POSTGRES_HOST
+                        value: "postgres-db-service"
                       - name: POSTGRES_DB
                         valueFrom:
                             secretKeyRef:
@@ -42,9 +38,8 @@ spec:
                             secretKeyRef:
                                 name: postgres-db-secret
                                 key: postgres-password
-                  volumeMounts:
-                      - name: postgres-storage-volume
-                        mountPath: /var/lib/postgresql/data
-                        subPath: postgres
-                      - name: postgres-init-volume
-                        mountPath: /docker-entrypoint-initdb.d
+                      - name: SECRET_KEY
+                        valueFrom:
+                            secretKeyRef:
+                                name: postgres-db-secret
+                                key: jwt-secret-key
