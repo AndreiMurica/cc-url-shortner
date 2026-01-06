@@ -1,7 +1,7 @@
 const AUTH_API_URL =
-    import.meta.env.VITE_AUTH_API_URL || "http://localhost:5000";
+    import.meta.env.VITE_AUTH_API_URL || "http://localhost:30002";
 const BUSINESS_API_URL =
-    import.meta.env.VITE_BUSINESS_API_URL || "http://localhost:8080";
+    import.meta.env.VITE_BUSINESS_API_URL || "http://localhost:30001";
 
 console.log("Auth URL folosit:", AUTH_API_URL);
 
@@ -56,7 +56,6 @@ export const ShortenURL = async (originalUrl: string) => {
     });
     const data = await response.json();
     if (response.ok) {
-        debugger;
         return data.short_code;
     } else {
         alert("URL shortening failed: " + data.message);
