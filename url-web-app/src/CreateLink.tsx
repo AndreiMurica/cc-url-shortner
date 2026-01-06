@@ -14,7 +14,8 @@ import { ShortenURL } from "./service";
 export const CreateLink = () => {
     const [url, setUrl] = useState("");
     const [shortenedUrl, setShortenedUrl] = useState<string | null>(null);
-    const WEB_URL = import.meta.env.VITE_WEB_APP_URL;
+    const WEB_URL =
+        import.meta.env.VITE_WEB_APP_URL || "http://localhost:30003";
 
     const generateLink = async () => {
         if (!url) return;

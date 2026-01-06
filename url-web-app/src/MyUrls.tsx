@@ -13,7 +13,8 @@ import {
 } from "@chakra-ui/react";
 
 export const MyUrls = () => {
-    const WEB_URL = import.meta.env.VITE_WEB_APP_URL;
+    const WEB_URL =
+        import.meta.env.VITE_WEB_APP_URL || "http://localhost:30003";
 
     // Use 'any' for now, but ideally define a type interface later
     const [urls, setUrls] = useState<any[]>([]);

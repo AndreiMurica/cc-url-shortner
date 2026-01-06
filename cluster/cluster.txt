@@ -1,4 +1,5 @@
 kubectl apply -f postgres/postgres-db-pvc.yaml
+kubectl apply -f postgres/postgres-configmap.yaml
 kubectl apply -f postgres/postgres-db-deployment.yaml
 kubectl apply -f postgres/postgres-db-service.yaml
 kubectl apply -f postgres/postgres-db-secret.yaml
@@ -17,6 +18,3 @@ kubectl apply -f url-web-app/web-app-deployment.yaml
 kubectl apply -f url-web-app/web-app-service.yaml
 
 
-kubectl port-forward service/auth-service 5000:5000
-kubectl port-forward service/business-logic-service 8080:8080
-kubectl port-forward service/web-app-service 5173:5173
