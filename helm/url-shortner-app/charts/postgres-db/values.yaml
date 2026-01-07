@@ -1,0 +1,34 @@
+replicaCount: 1
+
+image:
+  repository: postgres
+  tag: "15-alpine"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5432
+
+resources:
+  requests:
+    cpu: "250m"
+    memory: "256Mi"
+  limits:
+    cpu: "1000m"
+    memory: "1Gi"
+
+persistence:
+  enabled: true
+  storageClass: standard
+  size: 1Gi
+  subPath: postgres
+
+secrets:
+  name: postgres-db-secret
+  postgresDB: url_shortner_db
+  postgresUser: admin
+  postgresPassword: password
+  jwtSecretKey: "90c54946338e56b7b4c87d54ed0d90df9ef5e476aa91b760cd56f607cfa941cc"
+
+initScript:
+  configMapName: postgres-init-script

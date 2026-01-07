@@ -18,7 +18,6 @@ spec:
                 - name: web-app
                   image: andreimurica/cc-web-app:latest
                   imagePullPolicy: Always
-
                   ports:
                       - containerPort: 5173
                   env:
@@ -28,3 +27,10 @@ spec:
                         value: "http://business-logic-service:8080"
                       - name: VITE_WEB_APP_URL
                         value: "http://localhost:5173"
+                  resources:
+                      requests:
+                          cpu: "100m"
+                          memory: "128Mi"
+                      limits:
+                          cpu: "500m"
+                          memory: "512Mi"

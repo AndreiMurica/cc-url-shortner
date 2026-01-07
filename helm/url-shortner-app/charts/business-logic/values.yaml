@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: andreimurica/cc-business-logic
+  tag: latest
+  pullPolicy: IfNotPresent
+
+containerPort: 8080
+
+service:
+  type: NodePort
+  port: 8080
+  targetPort: 8080
+  nodePort: 30001
+
+env:
+  POSTGRES_HOST: postgres-db-service
+
+secrets:
+  name: postgres-db-secret
+  keys:
+    dbName: postgres-dbname
+    user: postgres-user
+    password: postgres-password
+    jwtSecret: jwt-secret-key
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"

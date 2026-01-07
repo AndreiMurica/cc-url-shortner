@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 CORS(app) 
 
-DB_NAME = os.getenv('POSTGRES_DB', 'url_shortener_db')
+DB_NAME = os.getenv('POSTGRES_DB', 'url_shortner_db')
 DB_USER = os.getenv('POSTGRES_USER', 'admin')
 DB_PASS = os.getenv('POSTGRES_PASSWORD', 'password')
 DB_HOST = os.getenv('POSTGRES_HOST', 'postgres-db-service')

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: adminer-service
+  labels:
+    app: adminer
+spec:
+  type: ClusterIP
+  selector:
+    app: adminer
+  ports:
+    - port: 8081
+      targetPort: 8080
+      protocol: TCP
+      name: http
