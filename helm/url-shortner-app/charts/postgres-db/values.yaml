@@ -24,10 +24,10 @@ persistence:
   subPath: postgres
 
 secrets:
-  name: postgres-db-secret
-  postgresDB: url_shortner_db
-  postgresUser: admin
-  postgresPassword: password
+  name: "postgres-db-secret"
+  postgresDB: "url_shortner_db"
+  postgresUser: "admin"
+  postgresPassword: "password"
   jwtSecretKey: "90c54946338e56b7b4c87d54ed0d90df9ef5e476aa91b760cd56f607cfa941cc"
 
 initScript:

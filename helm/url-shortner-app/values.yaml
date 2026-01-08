@@ -1,49 +1,72 @@
-postgres-db:
-  replicaCount: 1
-  persistence:
-    size: 1Gi
-    storageClass: standard
-  secrets:
-    postgresDB: url_shortner_db
-    postgresUser: admin
-    postgresPassword: password
-    jwtSecretKey: "90c54946338e56b7b4c87d54ed0d90df9ef5e476aa91b760cd56f607cfa941cc"
+apps:
+  postgres-db:
+    namespace: default
+    image: postgres:15-alpine
+    containerPort: 5432
+    replicaCount: 1
+    persistence:
+      size: 1Gi
+      storageClass: standard
+    secrets:
+      postgresDB: url_shortner_db
+      postgresUser: admin
+      postgresPassword: password
+      jwtSecretKey: "90c54946338e56b7b4c87d54ed0d90df9ef5e476aa91b760cd56f607cfa941cc"
 
-auth-service:
-  replicaCount: 1
-  image:
-    repository: andreimurica/cc-auth-service
-    tag: latest
-    pullPolicy: IfNotPresent
-  containerPort: 5000
-  env:
-    POSTGRES_HOST: postgres-db-service
-  secrets:
-    name: postgres-db-secret
+  auth-service:
+    replicaCount: 1
+    image:
+      repository: andreimurica/cc-auth-service:latest
+      pullPolicy: IfNotPresent
+    containerPort: 5000
+    env:
+      POSTGRES_HOST: postgres-db-service
+    secrets:
+      name: postgres-db-secret
 
-business-logic:
-  replicaCount: 1
-  image:
-    repository: andreimurica/cc-business-logic
-    tag: latest
-    pullPolicy: IfNotPresent
-  containerPort: 8080
-  env:
-    POSTGRES_HOST: postgres-db-service
-  secrets:
-    name: postgres-db-secret
+  business-logic:
+    replicaCount: 1
+    image:
+      repository: andreimurica/cc-business-logic:latest
+      pullPolicy: IfNotPresent
+    containerPort: 8080
+    env:
+      POSTGRES_HOST: postgres-db-service
+    secrets:
+      name: postgres-db-secret
 
-web-app:
-  replicaCount: 1
-  image:
-    repository: andreimurica/cc-web-app
-    tag: latest
-    pullPolicy: Always
-  containerPort: 5173
-  env:
-    VITE_AUTH_API_URL: "http://auth-service:5000"
-    VITE_BUSINESS_API_URL: "http://business-logic-service:8080"
-    VITE_WEB_APP_URL: "http://localhost:5173"
+  web-app:
+    replicaCount: 1
+    image:
+      repository: andreimurica/cc-web-app
+      tag: latest
+      pullPolicy: Always
+    containerPort: 5173
+    env:
+      VITE_AUTH_API_URL: "http://auth-service:5000"
+      VITE_BUSINESS_API_URL: "http://business-logic-service:8080"
+      VITE_WEB_APP_URL: "http://localhost:5173"
+
+infra:
+  grafana:
+    namespace: monitoring
+    image: grafana/grafana:latest
+    containerPort: 3000
+    serviceType: NodePort
+    nodePort: 31511
+
+  prometheus:
+    namespace: monitoring
+    image: prom/prometheus:latest
+    containerPort: 9090
+    serviceType: ClusterIP
+
+  portainer:
+    namespace: portainer
+    image: portainer/portainer-ce:latest
+    containerPort: 9000
+    serviceType: NodePort
+    nodePort: 30004
 
 serviceAccount:
   create: true
@@ -59,4 +82,7 @@ ingress:
   enabled: false
 
 httpRoute:
+  enabled: false
+
+autoscaling:
   enabled: false
