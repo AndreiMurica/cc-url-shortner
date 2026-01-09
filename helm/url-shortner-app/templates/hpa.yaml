@@ -1,32 +1,24 @@
-{{- if .Values.autoscaling.enabled }}
+{{- $allApps := merge .Values.apps .Values.infra -}}
+{{- range $name, $config := $allApps }}
+{{- if $config.hpa }}
+---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "url-shortner-app.fullname" . }}
-  labels:
-    {{- include "url-shortner-app.labels" . | nindent 4 }}
+  name: {{ $name }}-{{ $.Release.Name }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "url-shortner-app.fullname" . }}
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+    name: {{ $name }}-{{ $.Release.Name }}
+  minReplicas: {{ $config.hpa.min | default 1 }}
+  maxReplicas: {{ $config.hpa.max | default 5 }}
   metrics:
-    {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
-    {{- end }}
-    {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
-    - type: Resource
-      resource:
-        name: memory
-        target:
-          type: Utilization
-          averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
-    {{- end }}
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ $config.hpa.targetCPU | default 80 }}
+{{- end }}
 {{- end }}

@@ -14,7 +14,18 @@ apps:
       jwtSecretKey: "90c54946338e56b7b4c87d54ed0d90df9ef5e476aa91b760cd56f607cfa941cc"
 
   auth-service:
-    replicaCount: 1
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "256Mi"
+    hpa:
+      enabled: true
+      min: 2
+      max: 5
+      targetCPU: 60
     image:
       repository: andreimurica/cc-auth-service:latest
       pullPolicy: IfNotPresent
@@ -25,7 +36,18 @@ apps:
       name: postgres-db-secret
 
   business-logic:
-    replicaCount: 1
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+    hpa:
+      enabled: true
+      min: 2
+      max: 8
+      targetCPU: 70
     image:
       repository: andreimurica/cc-business-logic:latest
       pullPolicy: IfNotPresent
@@ -53,7 +75,7 @@ infra:
     image: grafana/grafana:latest
     containerPort: 3000
     serviceType: NodePort
-    nodePort: 31511
+    nodePort: 30005
 
   prometheus:
     namespace: monitoring

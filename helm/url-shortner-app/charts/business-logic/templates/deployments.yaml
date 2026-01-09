@@ -27,22 +27,22 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secrets.name }}
-                  key: {{ .Values.secrets.keys.dbName }}
+                  key: {{ .Values.secrets.keys.postgresDB }}
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secrets.name }}
-                  key: {{ .Values.secrets.keys.user }}
+                  key: {{ .Values.secrets.keys.postgresUser }}
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secrets.name }}
-                  key: {{ .Values.secrets.keys.password }}
+                  key: {{ .Values.secrets.keys.postgresPassword }}
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secrets.name }}
-                  key: {{ .Values.secrets.keys.jwtSecret }}
+                  key: {{ .Values.secrets.keys.jwtSecretKey }}
           resources:
             requests:
               cpu: {{ .Values.resources.requests.cpu }}

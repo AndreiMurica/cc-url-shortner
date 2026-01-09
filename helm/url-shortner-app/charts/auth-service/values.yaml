@@ -4,7 +4,13 @@ service:
   targetPort: 5000
   nodePort: 30002
 
-replicaCount: 1
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "256Mi"
 
 image:
   repository: andreimurica/cc-auth-service
@@ -14,12 +20,12 @@ image:
 containerPort: 5000
 
 env:
-  POSTGRES_HOST: postgres-db-service
+  POSTGRES_HOST: postgres-db-dev
 
 secrets:
   name: postgres-db-secret
   keys:
-    dbName: postgres-dbname
-    user: postgres-user
-    password: postgres-password
-    jwtSecret: jwt-secret-key
+    postgresDB: postgres-dbname
+    postgresUser: postgres-user
+    postgresPassword: postgres-password
+    jwtSecretKey: jwt-secret-key

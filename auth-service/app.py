@@ -12,7 +12,7 @@ CORS(app)
 DB_NAME = os.getenv('POSTGRES_DB', 'url_shortner_db')
 DB_USER = os.getenv('POSTGRES_USER', 'admin')
 DB_PASS = os.getenv('POSTGRES_PASSWORD', 'password')
-DB_HOST = os.getenv('POSTGRES_HOST', 'postgres-db-service')
+DB_HOST = os.getenv('POSTGRES_HOST', 'postgres-db-dev')
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 def get_db_connection():
