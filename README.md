@@ -21,4 +21,6 @@ kind create cluster --config ./cluster/kind-config.yaml
 
 helm install dev ./helm/url-shortner-app/
 
+Pentru a accesa adminer, trebuie facut port forward: 
 
+kubectl port-forward service/adminer-dev  8081:8081
