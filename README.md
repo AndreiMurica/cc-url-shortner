@@ -28,7 +28,15 @@ In plus, trebuie facut si un patch ca sa functioneze impreuna cu Kind:
 `kubectl patch deployment metrics-server -n kube-system --type 'json' -p '[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'`
 
 `helm install dev ./helm/url-shortner-app/`
+## Accesarea componentelor proiectului
 
-Pentru a accesa adminer, trebuie facut port-forward: 
+### Adminer
+Pentru a accesa Adminer, trebuie facut port-forward: 
 
 `kubectl port-forward service/adminer-dev 8081:8081`
+
+System -> PostgreSQL
+Server -> postgres-db-dev
+Username -> admin
+Password -> password
+Database -> url_shortner_db
