@@ -1,0 +1,31 @@
+service:
+  type: NodePort
+  port: 5000
+  targetPort: 5000
+  nodePort: 30002
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "256Mi"
+
+image:
+  repository: andreimurica/cc-auth-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+containerPort: 5000
+
+env:
+  POSTGRES_HOST: postgres-db-dev
+
+secrets:
+  name: postgres-db-secret
+  keys:
+    postgresDB: postgres-dbname
+    postgresUser: postgres-user
+    postgresPassword: postgres-password
+    jwtSecretKey: jwt-secret-key

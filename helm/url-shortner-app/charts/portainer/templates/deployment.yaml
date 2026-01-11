@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "portainer.fullname" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "portainer.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "portainer.name" . }}
+    spec:
+      serviceAccountName: {{ include "portainer.fullname" . }}-sa
+      containers:
+        - name: portainer
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/portainer"]
+          args: ["--no-analytics"]
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          resources:
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: dockersock
+              mountPath: /var/run/docker.sock
+      volumes:
+        - name: data
+          {{- if eq .Values.volumes.data.type "emptyDir" }}
+          emptyDir: {}
+          {{- end }}
+        - name: dockersock
+          {{- if eq .Values.volumes.dockersock.type "hostPath" }}
+          hostPath:
+            path: {{ .Values.volumes.dockersock.path }}
+          {{- end }}

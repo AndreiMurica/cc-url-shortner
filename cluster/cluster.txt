@@ -26,3 +26,5 @@ kubectl apply -f monitoring/grafana-deployment.yaml
 kubectl apply -f monitoring/grafana-service.yaml
 
 kubectl port-forward -n monitoring service/grafana-service 3000:3000
+
+

@@ -1,15 +1,26 @@
+# URL Shortner App
+
+Aplicatia contine urmatoarele componente: 
+
+* Microserviciu autentificare
+* Microserviciu pentru business logic
+* Frontend
+* Baza de date PostgreSQL
+* Adminer
+* Monitorizare prin Grafana + Prometheus
+* Portainer
+
+Fiecare componenta are un folder separat in care se gasesc fisierele yaml pentru service-uri si deployment-uri
+
+## Rulare
+Din root folder se ruleaza urmatoarele:
+
 docker pull kindest/node:v1.34.0
 
-kind create cluster
+kind create cluster --config ./cluster/kind-config.yaml
 
-ruleaza toate comenzile din cluster/cluster.txt
+helm install dev ./helm/url-shortner-app/
 
-kubectl get all (ca sa vezi serviciile si podurile)
+Pentru a accesa adminer, trebuie facut port forward: 
 
-trb facut port forward la podul cu db ul ca sa il poti deschide in DBeaver/ adminer la localhost:5432
-
-kubectl port-forward pod/postgres-db-.... 5432:5432
-
-+ port forward la podul cu adminer (daca vrei sa il folosesti): 
-kubectl port-forward pod/adminer-.... 8080
-
+kubectl port-forward service/adminer-dev  8081:8081

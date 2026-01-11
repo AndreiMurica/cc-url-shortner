@@ -16,10 +16,8 @@ spec:
                 - name: business-logic
                   image: andreimurica/cc-business-logic:latest
                   imagePullPolicy: IfNotPresent
-
                   ports:
                       - containerPort: 8080
-
                   env:
                       - name: POSTGRES_HOST
                         value: "postgres-db-service"
@@ -43,3 +41,10 @@ spec:
                             secretKeyRef:
                                 name: postgres-db-secret
                                 key: jwt-secret-key
+                  resources:
+                      requests:
+                          cpu: "100m"
+                          memory: "128Mi"
+                      limits:
+                          cpu: "500m"
+                          memory: "512Mi"

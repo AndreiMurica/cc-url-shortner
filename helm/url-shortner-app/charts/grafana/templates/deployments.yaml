@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grafana.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ include "grafana.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "grafana.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "grafana.name" . }}
+    spec:
+      containers:
+        - name: grafana
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          resources:
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+            - name: grafana-storage
+              mountPath: /var/lib/grafana
+          {{- end }}
+      {{- if .Values.persistence.enabled }}
+      volumes:
+        - name: grafana-storage
+          persistentVolumeClaim:
+            claimName: {{ include "grafana.fullname" . }}-pvc
+      {{- end }}

@@ -1,0 +1,24 @@
+{{- $allApps := merge .Values.apps .Values.infra -}}
+{{- range $name, $config := $allApps }}
+{{- if $config.hpa }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ $name }}-{{ $.Release.Name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ $name }}-{{ $.Release.Name }}
+  minReplicas: {{ $config.hpa.min | default 1 }}
+  maxReplicas: {{ $config.hpa.max | default 5 }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ $config.hpa.targetCPU | default 80 }}
+{{- end }}
+{{- end }}

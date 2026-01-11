@@ -1,0 +1,8 @@
+{{ range (list "monitoring" "portainer") }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ . }}
+---
+{{ end }}

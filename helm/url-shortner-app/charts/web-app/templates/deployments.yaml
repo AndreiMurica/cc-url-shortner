@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "web-app.fullname" . }}
+  labels:
+    app: {{ include "web-app.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "web-app.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "web-app.name" . }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+          env:
+            - name: VITE_AUTH_API_URL
+              value: {{ .Values.env.VITE_AUTH_API_URL | quote }}
+            - name: VITE_BUSINESS_API_URL
+              value: {{ .Values.env.VITE_BUSINESS_API_URL | quote }}
+            - name: VITE_WEB_APP_URL
+              value: {{ .Values.env.VITE_WEB_APP_URL | quote }}
+          resources:
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}

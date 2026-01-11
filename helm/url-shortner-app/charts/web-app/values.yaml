@@ -1,0 +1,27 @@
+replicaCount: 1
+
+image:
+  repository: andreimurica/cc-web-app
+  tag: latest
+  pullPolicy: Always
+
+containerPort: 5173
+
+service:
+  type: NodePort
+  port: 5173
+  targetPort: 5173
+  nodePort: 30003
+
+env:
+  VITE_AUTH_API_URL: "http://auth-service:5000"
+  VITE_BUSINESS_API_URL: "http://business-logic-service:8080"
+  VITE_WEB_APP_URL: "http://localhost:5173"
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"

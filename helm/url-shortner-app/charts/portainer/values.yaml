@@ -1,0 +1,28 @@
+namespace: portainer
+
+replicaCount: 1
+
+image:
+  repository: portainer/portainer-ce
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 9000
+  nodePort: 30004
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+volumes:
+  data:
+    type: emptyDir
+  dockersock:
+    type: hostPath
+    path: /var/run/docker.sock
