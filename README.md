@@ -4,11 +4,11 @@ Aplicatia contine urmatoarele componente:
 
 * Microserviciu autentificare
 * Microserviciu pentru business logic
-* Frontend / Web App (http://localhost:30003/)
+* Frontend / Web App
 * Baza de date PostgreSQL
 * Adminer
-* Monitorizare prin Grafana (http://localhost:30005/) + Prometheus
-* Portainer (http://localhost:30004/)
+* Monitorizare prin Grafana + Prometheus
+* Portainer
 
 Fiecare componenta are un folder separat in care se gasesc fisierele yaml pentru service-uri si deployment-uri
 
@@ -47,7 +47,11 @@ Pentru a accesa Adminer, trebuie facut port-forward:
 * Locatie: http://localhost:8081/
 
 System -> PostgreSQL
+
 Server -> postgres-db-dev
+
 Username -> admin
+
 Password -> password
+
 Database -> url_shortner_db
