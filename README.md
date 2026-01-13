@@ -4,7 +4,7 @@ Aplicatia contine urmatoarele componente:
 
 * Microserviciu autentificare
 * Microserviciu pentru business logic
-* Frontend
+* Frontend / Web App
 * Baza de date PostgreSQL
 * Adminer
 * Monitorizare prin Grafana + Prometheus
@@ -15,12 +15,43 @@ Fiecare componenta are un folder separat in care se gasesc fisierele yaml pentru
 ## Rulare
 Din root folder se ruleaza urmatoarele:
 
-docker pull kindest/node:v1.34.0
+`docker pull kindest/node:v1.34.0`
 
-kind create cluster --config ./cluster/kind-config.yaml
+`kind create cluster --config ./cluster/kind-config.yaml`
 
-helm install dev ./helm/url-shortner-app/
+Kind nu ofera Metrics API by default, asa ca trebuie adaugat manual pentru ca mecanismul de auto scaling sa functioneze:
 
-Pentru a accesa adminer, trebuie facut port forward: 
+`kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
 
-kubectl port-forward service/adminer-dev  8081:8081
+In plus, trebuie facut si un patch ca sa functioneze impreuna cu Kind:
+
+`kubectl patch deployment metrics-server -n kube-system --type 'json' -p '[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'`
+
+`helm install dev ./helm/url-shortner-app/`
+## Accesarea componentelor proiectului
+
+### Web App 
+* Locatie:  http://localhost:30003/
+
+### Portainer
+* Locatie: http://localhost:30004/
+
+### Grafana
+* Locatie: http://localhost:30005/
+
+### Adminer
+Pentru a accesa Adminer, trebuie facut port-forward: 
+
+`kubectl port-forward service/adminer-dev 8081:8081`
+
+* Locatie: http://localhost:8081/
+
+System -> PostgreSQL
+
+Server -> postgres-db-dev
+
+Username -> admin
+
+Password -> password
+
+Database -> url_shortner_db
